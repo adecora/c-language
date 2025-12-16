@@ -1,3 +1,20 @@
+# Ojo con el orden, que le pasamos al linker `n.s` antes de `c-asm.c`
+# Si no el compilador pone primero la funcion `piyush` y luego el start:
+#   -> piyush:
+#      .
+#      .
+#   -> start:
+#      j piyush
+#
+# Esto da problemas, yo quiero empezar por el start, no por piyush
+piyush: m.ld n.s c-asm.c
+	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld n.s c-asm.c -o main.elf
+	riscv64-unknown-elf-objcopy -O binary main.elf main.bin
+
+
+assembly: c-asm.c
+	riscv64-unknown-elf-gcc -O1 -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld c-asm.c -S
+
 compile: m.s m.ld
 	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld m.s -o main.elf
 	riscv64-unknown-elf-objcopy -O binary main.elf main.bin
@@ -12,4 +29,4 @@ connectgdb: main.elf
 	gdb-multiarch main.elf -ex "target remote localhost:1234" -ex "break _start" -ex "continue" -q
 
 clean:
-	rm -rf *.out *.bin *.elf
+	rm -rf *.out *.bin *.elf c-asm.s
