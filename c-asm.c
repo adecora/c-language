@@ -1,9 +1,14 @@
-int piyush() {
+void piyush2() {
+  end:
+    i = i + 21;
+}
 
-  volatile int i = 10;
+void piyush() {
+  int i = 12;
 
-  i = i + 1;
-  i = i + 10;
+  if (i == 12) {
+    goto end;
+  }
 
-  return i;
+  return;
 }
