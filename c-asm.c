@@ -1,14 +1,9 @@
-void piyush2() {
-  end:
-    i = i + 21;
-}
-
 void piyush() {
-  int i = 12;
+  int a = 3;
+  int b = 5;
+  int c;
 
-  if (i == 12) {
-    goto end;
-  }
-
-  return;
+  c = a && b;
+  c = a || b;
+  c = !a;
 }
